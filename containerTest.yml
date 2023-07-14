@@ -1,0 +1,69 @@
+parameters:
+- name: nodeVersion
+  type: string
+  default: '16.x'
+
+- name: snykServiceConnectionName
+  type: string
+
+- name: dockerImageName
+  type: string
+
+- name: dockerfilePath
+  type: string
+  default: ''
+
+- name: projectName
+  type: string
+  default: ''
+
+- name: organisation
+  type: string
+  default: ''
+
+- name: severityThreshold
+  type: string
+  default: 'low'
+
+- name: monitorWhen
+  type: string
+  default: 'always'
+  values:
+  - always
+  - noIssuesFound
+  - never
+
+- name: failOnIssues
+  type: boolean
+  default: true
+
+- name: additionalArguments
+  type: string
+  default: ''
+
+- name: testDirectory
+  type: string
+  default: '$(Build.SourcesDirectory)'
+
+steps:
+- task: NodeTool@0
+  displayName: "Node installation"
+  inputs:
+    versionSource: 'spec'
+    versionSpec: '${{parameters.nodeVersion}}'
+    checkLatest: true
+
+- task: SnykSecurityScan@1
+  displayName: "Snyk Container Test"
+  inputs:
+    serviceConnectionEndpoint: '${{parameters.snykServiceConnectionName}}'
+    testType: 'container'
+    severityThreshold: '${{parameters.severityThreshold}}'
+    dockerImageName: '${{parameters.dockerImageName}}'
+    dockerfilePath: '${{parameters.dockerfilePath}}'
+    monitorWhen: '${{parameters.monitorWhen}}'
+    failOnIssues: ${{parameters.failOnIssues}}
+    projectName: '${{parameters.projectName}}'
+    organization: '${{parameters.organisation}}'
+    testDirectory: '${{parameters.testDirectory}}'
+    additionalArguments: '${{parameters.additionalArguments}}'
