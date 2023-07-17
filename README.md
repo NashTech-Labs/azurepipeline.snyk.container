@@ -1,4 +1,4 @@
-# ADO.Pipelines.Templates.frameWork.common.snyk
+# ADO Pipeline Template for Snyk Container Test
 
 This template uses the Snyk Container test of Snyk Task.
 
